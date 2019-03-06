@@ -1,0 +1,5 @@
+# exclude apikey
+apikey.js
+
+# quokka files
+quokka*.js
