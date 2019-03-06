@@ -1,15 +1,31 @@
 const https = require('https');
-const http  = require('http');
+const http = require('http');
+const apikey = require('./apikey.js');
 
 /**
- * Prints info from Treehouse user profile to stdout
- * @param {string} userName
- * @param {number} badgeCount
- * @param {number} points (JavaScript)
+ * Builds URI from object
+ * @param {object} Api options as key/value pairs
+ * @return {string} uri
  */
-const printMessage = (userName, badgeCount, points) => {
-  const userInfo = `Treehouse user ${userName} has ${badgeCount} badges and ${points} points in JavaScript`;
-  console.log(userInfo);
+const buildUri = objParams => {
+  let strOptions = '?';
+  for (const prop in objParams) {
+    if (objParams.hasOwnProperty(prop)) {
+      strOptions += (`${prop}=${objParams[prop]}&`);
+    }
+  }
+  return strOptions.slice(0, -1);
+}
+
+/**
+ * Prints temperature for location to stdout
+ * @param {string} cityname
+ * @param {number} degrees
+ * @param {string} unit
+ */
+const printTempInfo = (cityname, degrees, unit) => {
+  const tempInfo = `The current temperature in ${cityname} is ${degrees}${unit}`;
+  console.log(tempInfo);
 }
 
 /**
@@ -24,9 +40,15 @@ const printError = (error) => {
  * Prints weather info
  * @param {string} userName
  */
-const printTreehouseProfile = userName => {
+const printTempApi = query => {
   try {
-    const request = https.get(`https://teamtreehouse.com/${userName}.json`, (res) => {
+    // api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=
+    // api.openweathermap.org/data/2.5/weather?zip=02144&APPID=
+    console.log(apikey.openWeatherMap);
+    oQuery = (typeof parseInt(query) === 'number') ? {zip: query} : {q: query};
+    const strApi = `api.openweathermap.org/data/2.5/weather${buildUri({...oQuery, APPID: apikey.openWeatherMap})}`;
+
+    const request = https.get(strApi, res => {
       switch (res.statusCode) {
         case 200:
           let buffer = '';
@@ -35,15 +57,15 @@ const printTreehouseProfile = userName => {
           });
 
           res.on('end', () => {
-            const profile = JSON.parse(buffer);
-            printMessage(userName, profile.badges.length, profile.points.JavaScript)
+            const weatherData = JSON.parse(buffer);
+            printMessage(query, profile.badges.length, profile.points.JavaScript)
           });
           break;
         case 404:
-          console.error(`Treehouse user ${userName} not found`);
+          console.error(`Treehouse user ${query} not found`);
           break;
         default:
-          console.error(`There was an error retrieving profile information for Treehouse user ${userName}: Status code: ${http.STATUS_CODES[res.statusCode]}`);
+          console.error(`There was an error retrieving weather data for ${query}: Status code: ${http.STATUS_CODES[res.statusCode]}`);
       }
 
     });
@@ -52,9 +74,9 @@ const printTreehouseProfile = userName => {
     });
 
   } catch (error) {
-      console.error(error.message);
+    console.error(error.message);
   }
 
 }
 
-module.exports.printTreehouseProfile = printTreehouseProfile;
+module.exports.printTempApi = printTempApi;

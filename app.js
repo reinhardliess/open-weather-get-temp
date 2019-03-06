@@ -1,6 +1,6 @@
 
-const profile = require('./weather.js');
+const weather = require('./weather.js');
 
 const locations = process.argv.slice(2);
-// users.forEach(profile.printTreehouseProfile);
+locations.forEach(weather.printTempApi);
 
