@@ -1,4 +1,4 @@
-// App that retrieves temperature data using the OpenWeather API
+// App that retrieves temperature data using the OpenWeatherMap API
 
 const weather = require('./weather.js');
 const locations = process.argv.slice(2);
