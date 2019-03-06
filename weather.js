@@ -1,3 +1,4 @@
+// cSpell:ignoreRegExp [A-Z]{3,}
 const https = require('https');
 const http = require('http');
 const apikey = require('./apikey.js');
@@ -5,7 +6,7 @@ const apikey = require('./apikey.js');
 /**
  * Builds URI from object
  * @param {object} Api options as key/value pairs
- * @return {string} uri
+ * @return {string} concatenated uri
  */
 const buildUri = objParams => {
   let strOptions = '?';
@@ -19,12 +20,12 @@ const buildUri = objParams => {
 
 /**
  * Prints temperature for location to stdout
- * @param {string} cityname
+ * @param {string} city name
  * @param {number} degrees
  * @param {string} unit
  */
-const printTempInfo = (cityname, degrees, unit) => {
-  const tempInfo = `The current temperature in ${cityname} is ${degrees}${unit}`;
+const printTempInfo = (cityName, degrees, unit) => {
+  const tempInfo = `The current temperature in ${cityName} is ${degrees}${unit}`;
   console.log(tempInfo);
 }
 
@@ -35,17 +36,9 @@ const printHelp = () => {
   console.log(
   `
   Prints current temperature information for a list of cities, zip codes
-  Usage: node app.js [--help] <zip[,countrycode]|city[,countrycode]> ...
+  Usage: node app.js [--help] <zip[,country code]|city[,country code]> ...
   `
   );
-}
-
-/**
- * Prints error message
- * @param {object} error
- */
-const printError = (error) => {
-  console.error(error.message);
 }
 
 /**
@@ -54,12 +47,11 @@ const printError = (error) => {
  */
 const printTempApi = query => {
   try {
-    // api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=
-    // api.openweathermap.org/data/2.5/weather?zip=02144&APPID=
-    // console.log(apikey.openWeatherMap);
+    // Samples:
+    // https://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=
+    // https://api.openweathermap.org/data/2.5/weather?zip=02144&APPID=
     const oQuery = isNaN(parseInt(query)) ? {q: query} : {zip: query};
     const strApi = `https://api.openweathermap.org/data/2.5/weather${buildUri({...oQuery, APPID: apikey.openWeatherMap})}`;
-    // console.log(strApi);
     const request = https.get(strApi, res => {
       switch (res.statusCode) {
         case 200:
@@ -86,7 +78,7 @@ const printTempApi = query => {
     });
 
   } catch (error) {
-    console.error(error.message);
+      console.error(`An error occurred, specifically: ${error.message}`);
   }
 
 }
