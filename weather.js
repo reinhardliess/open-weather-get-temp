@@ -1,6 +1,7 @@
 // cSpell:ignoreRegExp [A-Z]{3,}
 const https = require('https');
 const http = require('http');
+const path = require('path');
 const apikey = require('./apikey.js');
 
 /**
@@ -36,7 +37,7 @@ const printHelp = () => {
   console.log(
   `
   Prints current temperature information for a list of cities, zip codes
-  Usage: node app.js [--help] <zip[,country code]|city[,country code]> ...
+  Usage: node ${path.basename(process.argv[1])} [--help] <zip[,country code]|city[,country code]> ...
   `
   );
 }
