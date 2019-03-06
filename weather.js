@@ -29,6 +29,18 @@ const printTempInfo = (cityname, degrees, unit) => {
 }
 
 /**
+ * Prints help
+ */
+const printHelp = () => {
+  console.log(
+  `
+  Prints current temperature information for a list of cities, zip codes
+  Usage: node app.js [--help] <zip[,countrycode]|city[,countrycode]> ...
+  `
+  );
+}
+
+/**
  * Prints error message
  * @param {object} error
  */
@@ -44,10 +56,10 @@ const printTempApi = query => {
   try {
     // api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=
     // api.openweathermap.org/data/2.5/weather?zip=02144&APPID=
-    console.log(apikey.openWeatherMap);
-    oQuery = (typeof parseInt(query) === 'number') ? {zip: query} : {q: query};
-    const strApi = `api.openweathermap.org/data/2.5/weather${buildUri({...oQuery, APPID: apikey.openWeatherMap})}`;
-
+    // console.log(apikey.openWeatherMap);
+    const oQuery = isNaN(parseInt(query)) ? {q: query} : {zip: query};
+    const strApi = `https://api.openweathermap.org/data/2.5/weather${buildUri({...oQuery, APPID: apikey.openWeatherMap})}`;
+    // console.log(strApi);
     const request = https.get(strApi, res => {
       switch (res.statusCode) {
         case 200:
@@ -58,11 +70,11 @@ const printTempApi = query => {
 
           res.on('end', () => {
             const weatherData = JSON.parse(buffer);
-            printMessage(query, profile.badges.length, profile.points.JavaScript)
+            const city = `${weatherData.name}, ${weatherData.sys.country}`;
+            // convert Kelvin => Celsius
+            const degrees = Math.round(parseFloat(weatherData.main.temp) - 273.15);
+            printTempInfo(city, degrees, 'C');
           });
-          break;
-        case 404:
-          console.error(`Treehouse user ${query} not found`);
           break;
         default:
           console.error(`There was an error retrieving weather data for ${query}: Status code: ${http.STATUS_CODES[res.statusCode]}`);
@@ -80,3 +92,4 @@ const printTempApi = query => {
 }
 
 module.exports.printTempApi = printTempApi;
+module.exports.printHelp = printHelp;
