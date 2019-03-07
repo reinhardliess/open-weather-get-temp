@@ -11,6 +11,7 @@ This is a small node.js console app to retrieve the current temperatures(in Cels
 
 `Usage: node get-temp.js [--help] <zip[,country code]|city[,country code]> ...`
 
+Multi-word cities, e.g. New York, should be wrapped in quotes.\
 If you leave out the zip [country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes), the API will search for zips in the United States.
 
 ### Example
