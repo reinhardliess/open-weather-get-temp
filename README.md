@@ -10,3 +10,15 @@ This is a small node.js console app to retrieve the current temperatures(in Cels
 ## How to run
 
 `Usage: node get-temp.js [--help] <zip[,country code]|city[,country code]> ...`
+
+If you leave out the zip [country code](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes), the API will search for zips in the United States.
+
+### Example
+
+```shell
+$ node get-temp.js melbourne,au london,uk dakar 02144
+The current temperature in Melbourne, AU is 21C
+The current temperature in London, GB is 6C
+The current temperature in Dakar, SN is 17C
+The current temperature in Boston, US is -12C
+```
