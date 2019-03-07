@@ -17,8 +17,8 @@ If you leave out the zip [country code](https://en.wikipedia.org/wiki/List_of_IS
 
 ```shell
 $ node get-temp.js melbourne,au london,uk dakar 02144
-The current temperature in Melbourne, AU is 21C
-The current temperature in London, GB is 6C
-The current temperature in Dakar, SN is 17C
-The current temperature in Boston, US is -12C
 ```
+>The current temperature in Melbourne, AU is 21C
+>The current temperature in London, GB is 6C
+>The current temperature in Dakar, SN is 17C
+>The current temperature in Boston, US is -12C
